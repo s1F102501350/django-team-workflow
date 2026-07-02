@@ -29,6 +29,20 @@ def detail(request, pk):
     }
     return render(request, 'todo/detail.html', context)
 
+def update(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.method == 'POST':
+        task.title = request.POST['title']
+        due_at = parse_datetime(request.POST.get('due_at', ''))
+        task.due_at = make_aware(due_at) if due_at else None
+        task.save()
+        return redirect('detail', pk=task.pk)
+
+    context = {
+        'task': task,
+    }
+    return render(request, 'todo/edit.html', context)
+
 
 def delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
