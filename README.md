@@ -8,6 +8,7 @@ SOF203 exercise 13 用の Django ToDo アプリです。
 - タスク一覧、詳細ページ
 - Django CI
 - `main` ブランチを保護して、変更は Pull Request 経由にする運用
+- Render デプロイ用の設定
 
 ## メンバーが Pull Request で行うこと
 
@@ -16,7 +17,6 @@ SOF203 exercise 13 用の Django ToDo アプリです。
 - タスク編集ページを追加する
 - 編集内容を保存する view と URL を追加する
 - 必要なテストを追加する
-- Render デプロイ用の設定を追加する
 
 ## 確認コマンド
 
