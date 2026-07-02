@@ -1,12 +1,12 @@
 databases:
-  - name: django-test-db
+  - name: s1f102501350-django-team-workflow-db
     plan: free
-    databaseName: django_test_sample
-    user: django_test_sample
+    databaseName: s1f102501350_django_team_workflow
+    user: s1f102501350_django_team
 
 services:
   - type: web
-    name: django-test-web
+    name: s1f102501350-django-team-workflow
     env: python
     plan: free
     branch: main
@@ -15,7 +15,7 @@ services:
     envVars:
       - key: DATABASE_URL
         fromDatabase:
-          name: django-test-db
+          name: s1f102501350-django-team-workflow-db
           property: connectionString
       - key: SECRET_KEY
         generateValue: true
