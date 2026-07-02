@@ -29,6 +29,7 @@ def detail(request, pk):
     }
     return render(request, 'todo/detail.html', context)
 
+
 def update(request, pk):
     task = get_object_or_404(Task, pk=pk)
     if request.method == 'POST':
@@ -49,12 +50,9 @@ def delete(request, pk):
     task.delete()
     return redirect('index')
 
-def close(request, task_id):
-    try:
-        task = Task.objects.get(pk=task_id)
-    except Task.DoesNotExist:
-        raise Http404("Task does not exist")
 
+def close(request, pk):
+    task = get_object_or_404(Task, pk=pk)
     task.completed = True
     task.save()
     return redirect('index')
