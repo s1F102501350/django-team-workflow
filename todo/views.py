@@ -29,6 +29,7 @@ def detail(request, pk):
     }
     return render(request, 'todo/detail.html', context)
 
+
 def update(request, pk):
     task = get_object_or_404(Task, pk=pk)
     if request.method == 'POST':
@@ -47,4 +48,11 @@ def update(request, pk):
 def delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.delete()
+    return redirect('index')
+
+
+def close(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.completed = True
+    task.save()
     return redirect('index')
