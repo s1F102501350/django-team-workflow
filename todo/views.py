@@ -34,3 +34,13 @@ def delete(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.delete()
     return redirect('index')
+
+def close(request, task_id):
+    try:
+        task = Task.objects.get(pk=task_id)
+    except Task.DoesNotExist:
+        raise Http404("Task does not exist")
+
+    task.completed = True
+    task.save()
+    return redirect('index')
