@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import make_aware
 from django.utils.dateparse import parse_datetime
 from todo.models import Task
@@ -15,7 +15,7 @@ def index(request):
     if request.GET.get('order') == 'due':
         tasks = Task.objects.order_by('due_at')
     else:
-        tasks = Task.objects.order_by('-posted_at')
+        tasks = Task.objects.order_by('-posted_at', '-pk')
     context = {
         'tasks': tasks,
     }
@@ -28,3 +28,9 @@ def detail(request, pk):
         'task': task,
     }
     return render(request, 'todo/detail.html', context)
+
+
+def delete(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.delete()
+    return redirect('index')
