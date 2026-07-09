@@ -119,6 +119,15 @@ body > div:not(.text) a:hover {
   text-decoration: none;
 }
 
+.inline-action {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 ul {
   padding-left: 22px;
 }
