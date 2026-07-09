@@ -163,6 +163,18 @@ class TodoViewTestCase(TestCase):
         self.assertRedirects(response, '/')
         self.assertFalse(Task.objects.filter(pk=task.pk).exists())
 
+    def test_delete_get_keeps_other_tasks(self):
+        task = Task(title='task1', due_at=timezone.make_aware(datetime(2024, 7, 1)))
+        task.save()
+        other_task = Task(title='task2', due_at=timezone.make_aware(datetime(2024, 8, 1)))
+        other_task.save()
+        client = Client()
+        response = client.get('/{}/delete'.format(task.pk))
+
+        self.assertRedirects(response, '/')
+        self.assertFalse(Task.objects.filter(pk=task.pk).exists())
+        self.assertTrue(Task.objects.filter(pk=other_task.pk).exists())
+
     def test_delete_get_fail(self):
         client = Client()
         response = client.get('/1/delete')
