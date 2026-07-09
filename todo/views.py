@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import make_aware
 from django.utils.dateparse import parse_datetime
+from django.views.decorators.http import require_POST
 from todo.models import Task
 
 
@@ -51,6 +52,7 @@ def delete(request, pk):
     return redirect('index')
 
 
+@require_POST
 def close(request, pk):
     task = get_object_or_404(Task, pk=pk)
     task.completed = True
