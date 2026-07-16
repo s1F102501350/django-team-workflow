@@ -207,3 +207,23 @@ class TodoViewTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
         task.refresh_from_db()
         self.assertFalse(task.completed)
+
+    def test_reopen_post_success(self):
+        task = Task(title='task1', completed=True)
+        task.save()
+        client = Client()
+        response = client.post('/{}/reopen'.format(task.pk))
+
+        self.assertRedirects(response, '/')
+        task.refresh_from_db()
+        self.assertFalse(task.completed)
+
+    def test_reopen_get_does_not_reopen(self):
+        task = Task(title='task1', completed=True)
+        task.save()
+        client = Client()
+        response = client.get('/{}/reopen'.format(task.pk))
+
+        self.assertEqual(response.status_code, 405)
+        task.refresh_from_db()
+        self.assertTrue(task.completed)
