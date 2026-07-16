@@ -62,3 +62,11 @@ def close(request, pk):
     task.completed = True
     task.save()
     return redirect('index')
+
+
+@require_POST
+def reopen(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.completed = False
+    task.save()
+    return redirect('index')

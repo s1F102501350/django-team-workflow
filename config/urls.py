@@ -26,4 +26,5 @@ urlpatterns = [
     path('<int:pk>/update', todo_views.update, name='update'),
     path('<int:pk>/delete', todo_views.delete, name='delete'),
     path('<int:pk>/close', todo_views.close, name='close'),
+    path('<int:pk>/reopen', todo_views.reopen, name='reopen'),
 ]
