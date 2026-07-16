@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+
+  <head>
+    <title>Reaction Game</title>
+    <meta charset="UTF-8">
+    <meta name="author" content="INIAD">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'todo/style.css' %}">
+  </head>
+
+  <body>
+    <h1>Reaction Game</h1>
+    <p>光ったボタンをすばやく押して、10秒間でできるだけ高いスコアを目指しましょう。</p>
+
+    <div class="game-panel">
+      <div class="game-scoreboard">
+        <div>
+          <span>Score</span>
+          <strong id="score">0</strong>
+        </div>
+        <div>
+          <span>Time</span>
+          <strong id="time">10.0</strong>
+        </div>
+      </div>
+
+      <div class="game-board" aria-label="Reaction game board">
+        <button class="target-button" type="button" data-index="0"></button>
+        <button class="target-button" type="button" data-index="1"></button>
+        <button class="target-button" type="button" data-index="2"></button>
+        <button class="target-button" type="button" data-index="3"></button>
+        <button class="target-button" type="button" data-index="4"></button>
+        <button class="target-button" type="button" data-index="5"></button>
+        <button class="target-button" type="button" data-index="6"></button>
+        <button class="target-button" type="button" data-index="7"></button>
+        <button class="target-button" type="button" data-index="8"></button>
+      </div>
+
+      <p id="gameMessage" class="game-message">Start を押すとゲームが始まります。</p>
+
+      <div class="game-actions">
+        <button id="startButton" type="button">Start</button>
+        <a href="{% url 'index' %}">Back to tasks</a>
+      </div>
+    </div>
+
+    <script>
+      const buttons = Array.from(document.querySelectorAll('.target-button'));
+      const scoreElement = document.getElementById('score');
+      const timeElement = document.getElementById('time');
+      const messageElement = document.getElementById('gameMessage');
+      const startButton = document.getElementById('startButton');
+
+      let activeIndex = -1;
+      let score = 0;
+      let endTime = 0;
+      let timerId = null;
+
+      function setActiveButton() {
+        buttons.forEach((button) => button.classList.remove('is-active'));
+        activeIndex = Math.floor(Math.random() * buttons.length);
+        buttons[activeIndex].classList.add('is-active');
+      }
+
+      function finishGame() {
+        clearInterval(timerId);
+        timerId = null;
+        activeIndex = -1;
+        buttons.forEach((button) => button.classList.remove('is-active'));
+        startButton.disabled = false;
+        messageElement.textContent = `終了です。スコアは ${score} 点でした。`;
+      }
+
+      function updateTimer() {
+        const remaining = Math.max(0, endTime - performance.now());
+        timeElement.textContent = (remaining / 1000).toFixed(1);
+        if (remaining <= 0) {
+          finishGame();
+        }
+      }
+
+      function startGame() {
+        score = 0;
+        endTime = performance.now() + 10000;
+        scoreElement.textContent = score;
+        messageElement.textContent = '光っているボタンをクリックしてください。';
+        startButton.disabled = true;
+        setActiveButton();
+        updateTimer();
+        timerId = setInterval(updateTimer, 100);
+      }
+
+      buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+          if (Number(button.dataset.index) !== activeIndex) {
+            return;
+          }
+          score += 1;
+          scoreElement.textContent = score;
+          setActiveButton();
+        });
+      });
+
+      startButton.addEventListener('click', startGame);
+    </script>
+  </body>
+
+</html>
