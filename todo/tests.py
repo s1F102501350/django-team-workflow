@@ -107,6 +107,22 @@ class TodoViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.templates[0].name, 'todo/detail.html')
         self.assertEqual(response.context['task'], task)
+        self.assertContains(response, 'Close')
+        self.assertNotContains(response, 'Reopen')
+
+    def test_detail_get_completed_task_shows_reopen(self):
+        task = Task(
+            title='task1',
+            due_at=timezone.make_aware(datetime(2024, 7, 1)),
+            completed=True,
+        )
+        task.save()
+        client = Client()
+        response = client.get('/{}/'.format(task.pk))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Reopen')
+        self.assertNotContains(response, 'Close')
 
     def test_detail_get_fail(self):
         client = Client()
@@ -207,3 +223,37 @@ class TodoViewTestCase(TestCase):
         self.assertEqual(response.status_code, 405)
         task.refresh_from_db()
         self.assertFalse(task.completed)
+
+    def test_reopen_post_success(self):
+        task = Task(
+            title='task1',
+            due_at=timezone.make_aware(datetime(2024, 7, 1)),
+            completed=True,
+        )
+        task.save()
+        client = Client()
+        response = client.post('/{}/reopen'.format(task.pk))
+
+        self.assertRedirects(response, '/')
+        task.refresh_from_db()
+        self.assertFalse(task.completed)
+
+    def test_reopen_get_does_not_reopen(self):
+        task = Task(
+            title='task1',
+            due_at=timezone.make_aware(datetime(2024, 7, 1)),
+            completed=True,
+        )
+        task.save()
+        client = Client()
+        response = client.get('/{}/reopen'.format(task.pk))
+
+        self.assertEqual(response.status_code, 405)
+        task.refresh_from_db()
+        self.assertTrue(task.completed)
+
+    def test_reopen_post_fail(self):
+        client = Client()
+        response = client.post('/1/reopen')
+
+        self.assertEqual(response.status_code, 404)

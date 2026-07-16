@@ -27,10 +27,17 @@
       <a href="{% url 'index' %}">Top</a>
       <a href="{% url 'update' task.pk %}">Edit</a>
       <a href="{% url 'delete' task.pk %}">Delete</a>
+      {% if task.completed %}
+      <form class="inline-action" action="{% url 'reopen' task.pk %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Reopen</button>
+      </form>
+      {% else %}
       <form class="inline-action" action="{% url 'close' task.pk %}" method="post">
         {% csrf_token %}
         <button type="submit">Close</button>
       </form>
+      {% endif %}
     </div>
   </body>
 
