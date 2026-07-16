@@ -23,6 +23,10 @@ def index(request):
     return render(request, 'todo/index.html', context)
 
 
+def game(request):
+    return render(request, 'todo/game.html')
+
+
 def detail(request, pk):
     task = get_object_or_404(Task, pk=pk)
     context = {

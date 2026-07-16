@@ -32,6 +32,7 @@ p {
 
 form,
 .text,
+.game-panel,
 body > ul {
   margin: 20px 0;
   padding: 24px;
@@ -97,7 +98,7 @@ a:hover {
   text-decoration: underline;
 }
 
-body > div:not(.text) {
+body > div:not(.text):not(.game-panel) {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -105,7 +106,7 @@ body > div:not(.text) {
   margin: 24px 0;
 }
 
-body > div:not(.text) a {
+body > div:not(.text):not(.game-panel) a {
   display: inline-block;
   padding: 8px 12px;
   border: 1px solid #bae6fd;
@@ -113,7 +114,7 @@ body > div:not(.text) a {
   background: #e0f2fe;
 }
 
-body > div:not(.text) a:hover {
+body > div:not(.text):not(.game-panel) a:hover {
   border-color: #7dd3fc;
   background: #bae6fd;
   text-decoration: none;
@@ -144,6 +145,77 @@ li {
   color: #0f172a;
 }
 
+.game-panel {
+  border-left: 5px solid #22c55e;
+}
+
+.game-scoreboard {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.game-scoreboard div {
+  padding: 16px;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  background: #f0fdf4;
+  text-align: center;
+}
+
+.game-scoreboard span {
+  display: block;
+  color: #166534;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.game-scoreboard strong {
+  display: block;
+  color: #14532d;
+  font-size: 32px;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(72px, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.target-button {
+  aspect-ratio: 1;
+  min-height: 72px;
+  border: 2px solid #cbd5e1;
+  border-radius: 8px;
+  background: #e2e8f0;
+  box-shadow: inset 0 -6px 0 rgba(15, 23, 42, 0.08);
+}
+
+.target-button:hover {
+  border-color: #94a3b8;
+  background: #cbd5e1;
+}
+
+.target-button.is-active {
+  border-color: #15803d;
+  background: #22c55e;
+  box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.2);
+}
+
+.game-message {
+  min-height: 28px;
+  margin-bottom: 16px;
+}
+
+.game-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
 @media (max-width: 640px) {
   body {
     padding: 24px 14px;
@@ -155,7 +227,12 @@ li {
 
   form,
   .text,
+  .game-panel,
   body > ul {
     padding: 18px;
+  }
+
+  .game-scoreboard {
+    grid-template-columns: 1fr;
   }
 }
